@@ -2,3 +2,5 @@
 *.dvi
 *.log
 .DS_Store
+algorithms.dtx
+algorithms.ins

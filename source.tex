@@ -1,5 +1,8 @@
 \documentclass[a4j,10.5pt]{jarticle}
 
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
 \title{グラフ理論}
 
 \newtheorem{defi}{定義}[section]
@@ -184,5 +187,78 @@ u \in V',v \in V'について
 $(a_1,a_2,\cdots,a_n)$がグラフ化可能であるための必要十分条件は$(a_2 - 1,a_3 - 1,\cdots,a_{a_1 + 1} - 1,a_{a_1 + 2},\cdots,a_n)$を降順に並べ替えた列がグラフか可能であることである
 \end{theo}
 
+\newpage
+
+\section{最小全域木問題}
+\begin{description}
+\item[全域木] 与えられたグラフの部分グラフで木であるもの.ただしすべての頂点を含んでいる
+\item[最小全域木] 与えられたグラフの全域木の中でコスト最小のもの
+\item[コスト] その木に含まれる枝の重みの合計
+\end{description}
+
+\subsection{クラスカルのアルゴリズム}
+
+\begin{algorithm}
+\caption{クラスカルのアルゴリズム}
+\begin{algorithmic}[1]
+\FORALL{辺$e$ in $E$ in 昇順}
+\IF{採用した辺集合に$e$を加えても閉路を作らない}
+\STATE $e$を採用
+\ENDIF
+\ENDFOR
+\RETURN 採用した辺のコストの和
+\end{algorithmic}
+\end{algorithm}
+
+枝の重みを小さい順に処理して、現在見ている枝を選んで閉路ができなければ選ぶ、閉路ができるならば選ばないというアルゴリズム
+
+\subsection{プリムのアルゴリズム}
+\begin{algorithm}
+\caption{プリムのアルゴリズム}
+\begin{algorithmic}[1]
+\STATE $V_{new} = \{x\}、x \in V$
+\STATE $E_{new} = \emptyset$
+\WHILE{$V_{new} \neq V$}
+\STATE $V_{new}$に含まれる頂点$u$と含まれない頂点$v$を結ぶ重みが最小の辺$(u,v)$を$E$から選択
+\STATE $v$を$V_{new}$に加える
+\STATE $(u,v)$を$E_{new}$に加える
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
+重みの小さな枝を使って連結成分を成長させていく
+
+\subsection{関連問題}
+\subsubsection*{最小シュナイター木問題(NP完全)}
+\begin{description}
+\item[入力] 枝重みつきグラフ$G(V,E)$,ターミナル集合$T \subseteq V$
+\item[出力] $G$の部分木でターミナルをすべて含むもの.木のコストが最小のもの
+\end{description}
+\subsubsection*{最短経路問題}
+\begin{description}
+\item[入力] 枝に重みがついたグラフ$G=(V,E)$,2頂点$s,t$.
+\item[出力] $s$から$t$への道で,長さ最小のもの
+\end{description}
+\subsubsection*{ダイクストラのアルゴリズム}
+
+\begin{algorithm}
+\caption{ダイクストラのアルゴリズム}
+\begin{algorithmic}[1]
+\STATE 各頂点$v \in V$,$d(v)\leftarrow(v = s ならば 0,otherwize \ \infty)$
+\STATE 各頂点$v \in V$,$prev(v) \leftarrow 「無し」$
+\STATE $Q$に$V$の頂点をすべて追加
+\WHILE{$Q \neq \emptyset$}
+\STATE $u$ $\leftarrow$ $Q$から$d(u)$が最小である頂点を取り除く
+\FORALL{$u$からの辺がある頂点$v \in V$}
+\IF{$d(u) > d(u) + length(u,v)$}
+\STATE $d(v) \leftarrow d(u) + length(u,v)$
+\STATE $prev(v) \leftarrow u$ 
+\ENDIF
+\ENDFOR
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
+最初の頂点から一つ枝を渡った先の頂点の値を枝の重み分増やしそのあと頂点の中で一番重みの小さい頂点について同様のことを繰り返すアルゴリズム
 
 \end{document}
