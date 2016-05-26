@@ -1,5 +1,188 @@
-\documentclass{jarticle}
+\documentclass[a4j,10.5pt]{jarticle}
+
+\title{グラフ理論}
+
+\newtheorem{defi}{定義}[section]
+\newtheorem{theo}{定理}[section]
+\newtheorem{lemm}{補題}[section]
 
 \begin{document}
-テスト
+
+\maketitle
+
+\section{基本用語}
+\subsection{グラフの構成}
+\begin{description}
+\item [枝(edge)]
+\item [頂点(vertex)]
+\item [自己ループ] 一つ枝の両端が同じ頂点であるもの
+\item [並行枝] 二つの枝が両端同じ頂点であるもの
+\item [単純グラフ] 自己ループも並行枝も持たないグラフ
+\end{description}
+
+\begin{description}
+\item[連結グラフ] すべての頂点が繋がっているグラフ
+\item[非連結グラフ] 連結グラフ以外のグラフ
+\end{description}
+
+\begin{description}
+\item[有向グラフ] 枝に向きがあるグラフ
+\item[無向グラフ] 枝に向きがないグラフ
+\end{description}
+
+\subsection{グラフの表現}
+グラフは次のように表現される
+\begin{eqnarray*}
+G=(V,E) \\
+V:頂点集合 \\
+E:枝集合 \\
+\end{eqnarray*}
+$V = {v_1,v_2,v_3,\dots}$,
+$E = {e_1,e_2,e_3,\dots}$と表現されるとする時
+$e_1 = (v_1,v_2)$のようにして枝は表される\\
+
+$e_i = (1,3)$という枝がある時頂点1と3は隣接(adjacent)している、頂点1と枝$e_i$は接線(incident)しているという
+
+\begin{defi}[隣接行列(adjacency matrix)]
+頂点数$n$のグラフについて次のような$n \times n$行列で表される
+\begin{eqnarray*}
+頂点iと頂点jが隣接している時、行列の(i,j)成分が1\\
+頂点iと頂点jが隣接していない時、行列の(i,j)成分が0
+\end{eqnarray*}
+\end{defi}
+
+\begin{defi}[接続行列(incidnet matrix)]
+頂点数$n$、枝数$m$のグラフは次の行列で表される
+\begin{eqnarray*}
+頂点iと枝jが接続している時、行列の(i,j)成分が1\\
+頂点iと枝jが接続していない時、行列の(i,j)成分が0
+\end{eqnarray*}
+\end{defi}
+
+\begin{defi}[隣接リスト(adjacency list)]
+各頂点について接続する枝をリスト構造で表現したもの
+\end{defi}
+
+\subsection*{同型性(isomorphism)}
+\begin{defi}[同形成]
+グラフ$G_1=(V_1,E_1),G_2=(V_2,E_2)$について以下の条件を満たす$V_1$から$V_2$への1対1写像fが存在している時$G_1$と$G_2$は同型(isomorphic)であるという\\
+\\
+任意の$u,v \in V_1$について
+\begin{eqnarray*}
+(u,v) \in E_1 \Leftrightarrow (f(u),f(v)) \in E_2
+\end{eqnarray*}
+fを同型写像という
+\end{defi}
+
+\subsection{グラフの次数}
+\begin{defi}[グラフの次数]
+頂点$v$につながる枝の数を$v$の次数(degree)という\ $d(v)$と書く\\
+\\
+グラフの次数はそのグラフの頂点の中で最大の次数をグラフの次数とする\\
+グラフ$G$の次数は$\Delta(G)$と書く
+\end{defi}
+
+\subsection{様々なグラフ}
+\begin{description}
+\item[木(tree)] 閉路のない連結なグラフ
+\item[森(forest)] 閉路のないグラフ(連結でなくても良い)
+\end{description}
+木の中の次数1の頂点を葉(leaf)という\\
+木のひとつの頂点を根(root)として指定する場合もある
+
+\begin{theo}
+$n$頂点のグラフ$G$について以下の全ては同値である
+\begin{enumerate}
+\item $G$は木である
+\item $G$には閉路ではなく枝が$n-1$本ある
+\item $G$は連結で枝が$n-1$本ある
+\item $G$の任意の2頂点を結ぶ道はちょうど1通りできる
+\item $G$に閉路はないが、どこに枝を付け加えても閉路ができる
+\end{enumerate}
+\end{theo}
+
+\subsubsection*{完全2分木}
+\begin{itemize}
+\item 根からはに向かって常に２つの枝分かれをしている
+\item 根からどの葉までも距離が同じ
+\item 高さ$h$の完全2分グラフの葉の数は$2^{h + 1} - 1$
+\end{itemize}
+
+\subsubsection*{平面的グラフ}
+枝が交差しないように平面上に描画できるグラフ.平面的グラフを枝が交差しないように描画したものを平面グラフと呼ぶ
+
+\begin{theo}[オイラーの公式]
+連結な平面グラフの頂点数を$n$,枝数を$m$,面数を$h$とすると
+\[n + h = m + 2\]
+\end{theo}
+
+\subsubsection*{二部グラフ(bipartite graph)}
+頂点集合を各部分集合内で枝がないように2つの部分集合に分割できるグラフ\\
+二部グラフであることを明示するために
+\begin{eqnarray*}
+G = (V_1,V_2,E)\\
+V_1 \cup V_2 = V, V_1 \cap V_2 = \emptyset
+\end{eqnarray*}
+
+\subsubsection*{完全二部グラフ(Complete bipartite graph)}
+二部グラフで異なる部分集合の全てに枝があるものを完全二部グラフという\\
+$n_1$頂点と$n_2$頂点の完全二部グラフを$k_{n_1 n_2}$と書く.枝数は$n_1n_2$
+
+\subsubsection*{k部グラフ (k-partite graph)}
+頂点集合を同じグループ内に枝がないようにk個に分割できるもの
+
+\subsubsection*{完全グラフ(complete graph)}
+すべての2頂点間に枝があるグラフ\\
+$n$頂点完全グラフを$k_n$と書く\\
+$k_n$の枝数は${}_nC_2$
+
+\subsubsection*{正則グラフ(regular graph)}
+すべての頂点の次数が同じグラフを正則グラフという.すべての頂点の次数が$k$のグラフを$k$正則グラフという
+
+\subsection{歩道}
+歩道には以下のようなものがある
+\begin{description}
+\item[歩道(walk)] 頂点と枝が交互にあわられる列.連続する頂点と枝は接続している.頂点から始まって頂点で終わる列
+\item[小道(trail)] 同じ枝が2度現れない歩道
+\item[回路(circuit)] 最初と最後の頂点が同じ小道
+\item[道(path)] 同じ頂点が２回現れない小道
+\item[閉路(cycle)] 最初と最後の頂点が同じである道
+\end{description}
+
+\begin{theo}
+隣接行列のk乗の$(i,j)$成分は頂点$i$から$j$へ至る長さ$k$の歩道の数である
+\end{theo}
+
+\subsubsection{2頂点間の距離(distance)}
+頂点$u$と$v$を両端とする道の中で最短のものの長さを2頂点間の距離という.$d(u,v)$と表す
+
+\subsection{部分グラフ(subgraph)}
+\begin{defi}[部分グラフ(subgraph)]
+グラフ$G = (V,E)$,$G' = (V',E')$として以下を満たすとき$G'$は$G$の部分グラフという
+\begin{eqnarray*}
+V' \subseteq V,E' \subseteq E, 
+\forall e = (u,v) \in E' について\\
+u \in V' かつ v \in V'
+\end{eqnarray*}
+\end{defi}
+
+\begin{defi}[誘導部分グラフ(induced subgraph)]
+$G = (V,E)$,$G'=(V',E')$,$V'\subseteq V$に対して以下が成り立つとき$G'$を$V'$で誘導される$G$の誘導部分グラフといい$G[V']$と書く
+\begin{eqnarray*}
+u \in V',v \in V'について
+(u,v) \in E \Leftrightarrow (u,v) \in E'
+\end{eqnarray*}
+\end{defi}
+
+\subsection{補グラフ(complement graph)}
+グラフ$G=(V,E)$に対して$\overline{G} = (V,\overline{E})$,$\overline{E} = \{(u,v)|(u,v) \notin E\}$を$G$の補グラフという
+
+\subsection{グラフの次数列}
+グラフの頂点の次数を降順に並べたものをグラフの次数列という.非負整数の降順列があるグラフの次数列になっているときグラフか可能列という
+
+\begin{theo}
+$(a_1,a_2,\cdots,a_n)$がグラフ化可能であるための必要十分条件は$(a_2 - 1,a_3 - 1,\cdots,a_{a_1 + 1} - 1,a_{a_1 + 2},\cdots,a_n)$を降順に並べ替えた列がグラフか可能であることである
+\end{theo}
+
+
 \end{document}
