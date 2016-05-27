@@ -1,10 +1,12 @@
 \documentclass[a4j,10.5pt]{jarticle}
 
+\usepackage{theorem}
 \usepackage{algorithm}
 \usepackage{algorithmic}
 
 \title{グラフ理論}
 
+\theoremstyle{break}
 \newtheorem{defi}{定義}[section]
 \newtheorem{theo}{定理}[section]
 \newtheorem{lemm}{補題}[section]
@@ -260,5 +262,149 @@ $(a_1,a_2,\cdots,a_n)$がグラフ化可能であるための必要十分条件�
 \end{algorithm}
 
 最初の頂点から一つ枝を渡った先の頂点の値を枝の重み分増やしそのあと頂点の中で一番重みの小さい頂点について同様のことを繰り返すアルゴリズム
+
+\newpage
+
+\section{オイラー回路とハミルトン閉路}
+\begin{description}
+\item[オイラー回路] グラフの各枝をちょうど1回ずつ通る回路
+\item[ハミルトン閉路] グラフの各頂点をちょうど1回ずつ通る回路
+\end{description}
+
+\begin{theo}
+連結グラフがオイラー回路を持つ必要十分条件は奇数字数の頂点を持たないことである
+\end{theo}
+
+\begin{theo}[ディラック(Dirac)の定理]
+$G = (V,E),|v| \geq 3$とする.\\
+$\forall v \in V$について
+\begin{eqnarray*}
+d(v) \geq \frac{|v|}{2} \Rightarrow Gはハミルトン閉路を持つ
+\end{eqnarray*}
+\end{theo}
+
+\begin{theo}[オーレ(Ore)の定理]
+$G = (V,E),|v| \geq 3$とする.\\
+隣接していないすべての頂点ペア$v,w$について
+\begin{eqnarray*}
+d(v) + d(w) \geq |v| \Rightarrow Gはハミルトン閉路を持つ
+\end{eqnarray*}
+\end{theo}
+
+\newpage
+
+\section{グラフの彩色問題}
+\subsection{頂点彩色}
+グラフの各頂点に色をつける.ただし隣接する頂点は違う色
+\begin{defi}[k-頂点色彩問題]
+グラフのk-頂点色彩問題とは写像$f:v \rightarrow \{1,2,3,\cdots,k\}$で任意の枝$(u,v) \in E$に対して$f(u) \neq f(v)$を満たすものである
+\end{defi}
+$G$に$k$-頂点彩色が存在するとき,$G$は$k$-頂点彩色可能という\\
+$G$が$k$-頂点彩色可能な最小の$k$を$G$の頂点彩色数といい$\chi(G)$と表す
+
+\begin{theo}
+グラフ$G$は$(\Delta(G)+1)$-彩色可能
+\end{theo}
+
+\begin{theo}[ブルックス(Brooks)の定理]
+連結グラフ$G$が完全グラフでも奇数長閉路でもなければ$G$は$\Delta(G)$彩色可能である
+\end{theo}
+
+\begin{theo}[先の定理より弱い定理]
+正則でないグラフは$\Delta(G)$-彩色可能
+\end{theo}
+
+\subsubsection{2-彩色問題}
+\begin{theo}
+\[Gが2彩色可能 \Leftrightarrow Gが二部グラフ\]
+\end{theo}
+
+\begin{theo}
+\[Gが2彩色可能 \Leftrightarrow Gは奇数長閉路を持たない\]
+\end{theo}
+
+\begin{algorithm}
+\caption{２彩色可能の判定}
+\begin{algorithmic}[1]
+\STATE ある頂点$v$とし$S_1 \leftarrow \{v\}$
+\STATE $n \leftarrow 1$
+\WHILE{$V \neq \cup_{i = 1}^n S_i$}
+\STATE $S_{n + 1} \leftarrow$ $S_n$の頂点のいずれかに隣接しかつまだ$S_1,S_2,\cdots,S_n$に入っていない
+\IF{$S_{n+1}$内に枝がある}
+\RETURN $false$
+\ENDIF
+\STATE $n \leftarrow n + 1$
+\ENDWHILE
+\RETURN $true$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{theo}
+平面グラフは$4$彩色可能である.またこれは四色定理(隣接領域が異なる色になるように塗るには$4$色あれば十分であるという定理)と同値である
+\end{theo}
+
+\subsection{辺彩色}
+同じ頂点に接続する枝が異なる色になるように色をつける.\\
+$k$色で辺彩色できるとき$k$-辺彩色可能という.\\
+$G$が辺彩色可能な最小の$k$を$G$の辺彩色数といい$\chi'(G)$と書く
+
+\begin{theo}[ビジング(vizing)の定理]
+\begin{eqnarray*}
+\forall G,\Delta(G) \leq \chi'(G) \leq \Delta(G) + 1
+\end{eqnarray*}
+\end{theo}
+
+\begin{theo}[ケーニッヒ(könig)の定理]
+\begin{eqnarray*}
+\forall G \in Binary Graph,\chi'(G) = \Delta(G)
+\end{eqnarray*}
+\end{theo}
+
+\newpage
+
+\section{最大流問題}
+\begin{defi}[最大流問題]
+\begin{description}
+\item[入力] 有向グラフ,2頂点$s,t$,枝の重み$w(e)$
+\item[出力] $s$から$t$までに最大どれだけ流せるか
+\end{description}
+フロー関数を$f$とした時\\
+\[\forall e,f(e) \leq w(e)\]
+\[\sum_{v_{in}} f(e) = \sum_{v_{out}} f(e)\]
+を満たす
+\end{defi}
+
+\subsection{最大フローを求めるアルゴリズム}
+\subsubsection*{残余ネットワーク}
+現在のフローに対してあとどれだけの量を流すことができるかを表したグラフ.各枝$e$に対して正方向に$w(e) - f(e)$の重み,逆方向に$f(e)$の重みをつける
+\subsubsection*{増大道(augmenting path)}
+残余ネットワーク上で$s$から$t$に至る道.増大道の値はその道上で最も小さい重み.
+増大道にその値を増大道にその値を流してグラフを書き換える
+\subsubsection*{フォード・ファルカーソン(Ford-Fulkerson)法}
+\begin{enumerate}
+\item 現在のフローを決める
+\item 残余ネットワークを作る
+\item if 増大道がある then フローを更新し1.へ \\ else 現在のフローを出力
+\end{enumerate}
+
+\begin{theo}
+フロー$f$が最大フローであるための必要十分条件は$f$の残余ネットワークに増大道が存在しないことである
+\end{theo}
+
+\subsection{グラフのカット}
+\begin{description}
+\item[入力] 最大フロー問題と同じ
+\item[出力] 頂点集合の2分割,ただし2頂点$s,t$は異なる側に
+\item[カットのサイズ] $Y$側から$V-Y$側に向かう枝の重みの総和
+\end{description}
+
+\begin{theo}[最大フロー最小カットの定理]
+任意のグラフについて
+\[最大フローの値 = 最小カットのサイズ\]
+\end{theo}
+
+\newpage
+
+\section{マッチング問題}
 
 \end{document}
