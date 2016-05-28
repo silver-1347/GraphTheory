@@ -406,5 +406,57 @@ $G$が辺彩色可能な最小の$k$を$G$の辺彩色数といい$\chi'(G)$と�
 \newpage
 
 \section{マッチング問題}
+頂点を共有しない枝の集合を探す.\\
+マッチング$M$に含まれる枝に接続している頂点を「マッチしている」という.マチングのサイズは$M$に含まれている枝の数.
+
+\subsubsection*{極大マッチング(maximal matching)}
+そのマッチングに(マッチングであることを保ちつつ)枝を追加できないもの
+\subsubsection*{最大マッチング(maximum matching)}
+サイズが最大のマッチング
+
+\begin{theo}
+任意のグラフにおいて
+\[(マッチングのサイズ) \geq (最大マッチングのサイズ)\]
+\end{theo}
+
+\subsubsection*{完全マッチング(perfect matching)}
+すべての頂点がマッチしているマッチング
+
+\subsection{二部グラフのマッチング}
+頂点集合$S \subseteq U$に対して
+$\delta(S)$を$S$のいずれか少なくとも一つに隣接する頂点集合とする
+\begin{theo}[ホールの定理]
+$G(U,V,E)$が完全マッチングを持つための必要十分条件は任意の$S \subseteq U$に対して
+\[|\delta(S)| \geq |S|(Hall条件) \]
+となることである
+\end{theo}
+
+\subsection{ハンガリー法}
+二部グラフの最大マッチングを求めるアルゴリズム
+
+\begin{description}
+\item[交互道(alternating path)] $M$の枝と$E \backslash M$の枝を交互に使う道
+\item[増大道(augmenting path)] 交互道でかつ最初と最後の頂点がマッチしていないもの.最初と最後の枝は$E \backslash M$.増大道上でマッチングに使われている枝と使われていない枝を交換するとサイズが一つ大きなッチングが得られる
+\end{description}
+
+\subsubsection*{アルゴリズム}
+\begin{enumerate}
+\item 現在のマッチングを求める
+\item if そこに増大道がある then それに沿ってサイズの一つ大きなマッチングを求め,1.へ\\
+else return マッチング$M$
+\end{enumerate}
+
+\subsubsection*{増大道を見つける手続き}
+\begin{enumerate}
+\item $M$でマッチングしていない頂点の一つを$u$とする
+\item $u$に隣接している$V$の頂点集合を$T_1$とする
+\item $T_1$の中でマッチしていない頂点があれば増大道が見つかった
+\item $T_1$の頂点が全てマッチしているならそれらにマッチしている$U$の頂点集合を$S_1$とする
+\item $S_1$のいずれかの頂点に隣接する$V$の頂点で$T_1$に入っていないものを$T_2$とする
+\item $T_2$の中にマッチしていない頂点があれば増大道が見つかった
+\item $T_2$の頂点が全てマッチしていればそれらとマッチしている$U$の頂点集合を$S_2$とする.以上を繰り返す
+\end{enumerate}
+
+これを全ての$u$の選び方について行う
 
 \end{document}
